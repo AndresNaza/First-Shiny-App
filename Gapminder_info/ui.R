@@ -17,13 +17,17 @@ shinyUI(navbarPage(
     
     title = "Gapminder Information",
     
-    tabPanel(title = "Instructions",
-             fluidPage(h3("Instructions - Documentation"),br(),
-                       p(strong("Objective:"), "The objective of this app is to let the user gain easy to use insights of the data contained on the Gapminder dataset"),
-                       p(strong("Dataset:"), "Let's recall that the Gapminder dataset is an excerpt of the Gapminder data on life expectancy, GDP per capita, and population by country every 5 years."),
-                       p(strong("Instructions:"), "The app is simple and easy to use. It consists of a sidebar panel and 4 tabs for analysis. Let's make a quick description of each:"),
-                       p("- Sidebar: contains widget inputs for the user to filter data"),
-                       p("- Life expectancy tab:"))
+    tabPanel(title = "Documentation",
+             fluidPage(h3("Documentation"),br(),
+                       p(em(strong("Objective:")), "The objective of this app is to let the user gain easy to use insights of the data contained on the Gapminder dataset."),
+                       br(),
+                       p(em(strong("Dataset:")), "Data has been obtained from the 'gapminder' library on CRAN. The dataset is an excerpt of the Gapminder data on life expectancy, GDP per capita, and population by country every 5 years."),
+                       br(),
+                       p(em(strong("Information on the App:")), "The app is simple and easy to use. It has 4 tab panels with different analysis for the user to query. Let's make a quick description of each:"),
+                       p("- ",strong("Interaction over time: "), "contains an animated scatterplot, with GDP per capita on the x-axis, life expectancy on the y-axis and population as the size of the points. The points are colored by their continent."),
+                       p("- ",strong("Geospacial analysis: "), "this tab has a side panel where the user is able to filter data according to the desired year and variable to check. Filters are then calculated in the world map and the bottom table is refreshed and sorted decreasingly by the selected variable."),
+                       p("- ",strong("Trends: "), "several trend graphics are displayed for the user to spot any anomaly on countries trend."),
+                       p("- ",strong("Linear predictions: "), "this final tab allows the user to define a linear model by country and predict the values for a given year (until 2100)."))
              ),
     
     
@@ -231,7 +235,9 @@ shinyUI(navbarPage(
                            br(),
                            p("Predicted Population: "), textOutput("pred_pop"),
                            br(),
-                           p("Predicted GDP per capita: "), textOutput("pred_gdp")
+                           p("Predicted GDP per capita: "), textOutput("pred_gdp"),
+                           br(),
+                           p(code("IMPORTANT:"), "Take into account that this are simple linear regressions for the activity purpose. Thus, the user must consider the characteristics of the model when interpreting the results. Otherwise some predictions may result ilogical, specially when considering the life expectancy variable.")
                 )
                 
              ))
