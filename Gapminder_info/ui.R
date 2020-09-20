@@ -26,6 +26,14 @@ shinyUI(navbarPage(
                        p("- Life expectancy tab:"))
              ),
     
+    
+    ############################################################################
+    tabPanel(title="Interactions over time",
+             fluidPage(
+                 plotlyOutput("animation")
+             )),
+    
+    ############################################################################
     tabPanel(title="Geospacial analysis",
              fluidPage(
                  
@@ -51,6 +59,5 @@ shinyUI(navbarPage(
                            br(),
                            dataTableOutput("maps_table"),
                            width = 9)
-            )
-    )
+            ))
 ))

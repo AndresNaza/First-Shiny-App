@@ -14,6 +14,28 @@ gapminder_data_set <- gapminder::gapminder %>% inner_join(gapminder::country_cod
 # Define server logic
 shinyServer(function(input, output) {
 
+    output$animation <- renderPlotly({
+        
+        animation_plot <- plot_ly(x=gapminder_data_set$gdpPercap,
+                                  y=gapminder_data_set$lifeExp,
+                                  size=gapminder_data_set$pop,
+                                  color=gapminder_data_set$continent,
+                                  frame=gapminder_data_set$year,
+                                  text=paste("Country: ",gapminder_data_set$country,"\n",
+                                             "Pop: ",gapminder_data_set$pop,"\n",
+                                             "Life exp: ",gapminder_data_set$lifeExp,"\n",
+                                             "GDP per cap: ",gapminder_data_set$gdpPercap,"\n"),
+                                  hoverinfo="text",
+                                  type="scatter",
+                                  mode="markers") %>% 
+                            layout(xaxis=list(type="log"))
+        
+        animation_plot
+    })
+    
+    
+    ############################################################################
+    
     output$maps_by_year_and_var <- renderPlotly({
         
         # filter data according to year
@@ -32,11 +54,13 @@ shinyServer(function(input, output) {
         plot_map
     })
     
+    ############################################################################
     output$maps_table <- renderDataTable({
         
         maps_filtered_data <- filter(gapminder_data_set, year == input$year)
         
-        map_table <- maps_filtered_data %>% select(continent, country, lifeExp, pop, gdpPercap) %>% 
+        map_table <- maps_filtered_data %>% select(continent, iso_alpha, country,
+                                                   lifeExp, pop, gdpPercap) %>% 
                                             arrange(desc(switch(input$selected_var,
                                                                 life_exp=lifeExp,
                                                                 pop=pop,
