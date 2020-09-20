@@ -47,5 +47,5 @@ The final tab allows the user to define a linear model by country and predict th
 IMPORTANT: Take into account that this are simple linear regressions for the activity purpose. Thus, the user must consider the characteristics of the model when interpreting the results. Otherwise some predictions may result illogical, specially when considering the life expectancy variable.
 
 
-THANKS FOR WATCHING ;)
+                    THANKS FOR WATCHING ;)
 
