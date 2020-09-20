@@ -14,6 +14,8 @@ gapminder_data_set <- gapminder::gapminder %>% inner_join(gapminder::country_cod
 # Define server logic
 shinyServer(function(input, output) {
 
+    ############################################################################
+    
     output$animation <- renderPlotly({
         
         animation_plot <- plot_ly(x=gapminder_data_set$gdpPercap,
@@ -55,6 +57,7 @@ shinyServer(function(input, output) {
     })
     
     ############################################################################
+    
     output$maps_table <- renderDataTable({
         
         maps_filtered_data <- filter(gapminder_data_set, year == input$year)
@@ -68,5 +71,88 @@ shinyServer(function(input, output) {
         map_table
     })
     
+    ############################################################################
+    
+    output$trends_plot <- renderPlotly({
+         
+         trends_data_set <- gapminder_data_set %>% pivot_longer(cols = -c(country,continent,
+                                                                          year,iso_alpha,iso_num),
+                                                                names_to="data_var")
+         trends <- ggplot(trends_data_set,
+                             aes(x=year,y = value, color=country))+
+                         geom_line()+
+                         facet_grid(rows=vars(data_var),cols = vars(continent),scales = "free_y" )+
+                         theme_bw()+
+                         theme(legend.position = "none")+
+                         scale_color_manual(values=gapminder::country_colors)
+         
+         trends <- ggplotly(trends)
+        
+         trends
+    })
+    
+    ############################################################################
+    
+    output$prediction_plot <- renderPlotly({
+        
+        data_for_country <- filter(gapminder_data_set, country==input$country_var) %>% 
+                            pivot_longer(cols = -c(country,continent,
+                                                      year,iso_alpha,iso_num),
+                                                   names_to="data_var")
+        
+        pred_plot <- ggplot(data_for_country,aes(year,value, color=data_var))+
+                        geom_point()+
+                        geom_smooth(method="lm")+
+                        facet_wrap(~data_var, scales="free")+
+                        theme_bw()+
+                        theme(legend.position = "none")
+        
+        pred_plot <- ggplotly(pred_plot)
+        
+        pred_plot
+        
+        })
+    
+    ############################################################################
+    
+    output$pred_life_exp <- renderText({
+        
+        data_for_prediction <- filter(gapminder_data_set, country==input$country_var)
+        
+        model_life_exp <- lm(lifeExp~year,data=data_for_prediction)
+        
+        prediction_life_exp <- predict(model_life_exp,newdata=data.frame(year=as.double(input$year_pred)))
+        
+        prediction_life_exp
+        
+    })
+    
+    ############################################################################
+    
+    output$pred_pop <- renderText({
+        
+        data_for_prediction <- filter(gapminder_data_set, country==input$country_var)
+        
+        model_life_exp <- lm(pop~year,data=data_for_prediction)
+        
+        prediction_life_exp <- predict(model_life_exp,newdata=data.frame(year=as.double(input$year_pred)))
+        
+        prediction_life_exp
+        
+    })
+    
+    ############################################################################
+    
+    output$pred_gdp <- renderText({
+        
+        data_for_prediction <- filter(gapminder_data_set, country==input$country_var)
+        
+        model_life_exp <- lm(gdpPercap~year,data=data_for_prediction)
+        
+        prediction_life_exp <- predict(model_life_exp,newdata=data.frame(year=as.double(input$year_pred)))
+        
+        prediction_life_exp
+        
+    })
     
 })
